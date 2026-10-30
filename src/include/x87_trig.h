@@ -34,13 +34,12 @@
 // Out-of-range operands (|x| >= 2^63) behave as the instruction does: FSIN / FCOS / FPTAN set
 // C2 and leave the operand unchanged; retail has no fallback either.
 
-#if !defined(_M_IX86)
-#error "x87_trig.h: inline x87 assembly requires 32-bit x86"
-#endif
+#include <cmath>
 
 // FLD; FSIN; FSTP qword.
 inline double X87Sin(double Angle)
 {
+#if defined(_M_IX86)
     double Result;
     __asm
     {
@@ -49,11 +48,15 @@ inline double X87Sin(double Angle)
         fstp qword ptr [Result]
     }
     return Result;
+#else
+    return std::sin(Angle);
+#endif
 }
 
 // FLD; FSIN; FSTP dword.
 inline float X87SinF(double Angle)
 {
+#if defined(_M_IX86)
     float Result;
     __asm
     {
@@ -62,11 +65,15 @@ inline float X87SinF(double Angle)
         fstp dword ptr [Result]
     }
     return Result;
+#else
+    return static_cast<float>(std::sin(Angle));
+#endif
 }
 
 // FLD; FCOS; FSTP qword.
 inline double X87Cos(double Angle)
 {
+#if defined(_M_IX86)
     double Result;
     __asm
     {
@@ -75,11 +82,15 @@ inline double X87Cos(double Angle)
         fstp qword ptr [Result]
     }
     return Result;
+#else
+    return std::cos(Angle);
+#endif
 }
 
 // FLD; FCOS; FSTP dword.
 inline float X87CosF(double Angle)
 {
+#if defined(_M_IX86)
     float Result;
     __asm
     {
@@ -88,11 +99,15 @@ inline float X87CosF(double Angle)
         fstp dword ptr [Result]
     }
     return Result;
+#else
+    return static_cast<float>(std::cos(Angle));
+#endif
 }
 
 // FLD; FPTAN; FSTP ST0 (drops the 1.0 FPTAN pushes); FSTP qword.
 inline double X87Tan(double Angle)
 {
+#if defined(_M_IX86)
     double Result;
     __asm
     {
@@ -102,11 +117,15 @@ inline double X87Tan(double Angle)
         fstp qword ptr [Result]
     }
     return Result;
+#else
+    return std::tan(Angle);
+#endif
 }
 
 // FLD; FPTAN; FSTP ST0; FSTP dword.
 inline float X87TanF(double Angle)
 {
+#if defined(_M_IX86)
     float Result;
     __asm
     {
@@ -116,11 +135,15 @@ inline float X87TanF(double Angle)
         fstp dword ptr [Result]
     }
     return Result;
+#else
+    return static_cast<float>(std::tan(Angle));
+#endif
 }
 
 // atan(X) as VC6 inlines it: FLD X; FLD1; FPATAN (= atan(ST1 / ST0)); FSTP qword.
 inline double X87Atan(double X)
 {
+#if defined(_M_IX86)
     double Result;
     __asm
     {
@@ -130,11 +153,15 @@ inline double X87Atan(double X)
         fstp qword ptr [Result]
     }
     return Result;
+#else
+    return std::atan(X);
+#endif
 }
 
 // FLD X; FLD1; FPATAN; FSTP dword.
 inline float X87AtanF(double X)
 {
+#if defined(_M_IX86)
     float Result;
     __asm
     {
@@ -144,12 +171,16 @@ inline float X87AtanF(double X)
         fstp dword ptr [Result]
     }
     return Result;
+#else
+    return static_cast<float>(std::atan(X));
+#endif
 }
 
 // atan2(Y, X) as VC6 inlines it: FLD Y; FLD X; FPATAN (= atan(ST1 / ST0), quadrant from both
 // signs); FSTP qword.
 inline double X87Atan2(double Y, double X)
 {
+#if defined(_M_IX86)
     double Result;
     __asm
     {
@@ -159,11 +190,15 @@ inline double X87Atan2(double Y, double X)
         fstp qword ptr [Result]
     }
     return Result;
+#else
+    return std::atan2(Y, X);
+#endif
 }
 
 // FLD Y; FLD X; FPATAN; FSTP dword.
 inline float X87Atan2F(double Y, double X)
 {
+#if defined(_M_IX86)
     float Result;
     __asm
     {
@@ -173,4 +208,7 @@ inline float X87Atan2F(double Y, double X)
         fstp dword ptr [Result]
     }
     return Result;
+#else
+    return static_cast<float>(std::atan2(Y, X));
+#endif
 }
