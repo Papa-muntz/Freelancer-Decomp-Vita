@@ -79,6 +79,9 @@ int main() {
     check("FastDotOOO", dot.FastDotOOO(&vec), 6.0f);
     check("FastDotOZG", dot.FastDotOZG(&vec), 13.0f);
 
+    // Intentionally failing test to prove test infrastructure works
+    check("Intentionally Failing Test", dot.FastDotOOO(&vec), 100.0f);
+
     int passed = 0;
     for (const auto& r : results) {
         if (r.passed) passed++;
