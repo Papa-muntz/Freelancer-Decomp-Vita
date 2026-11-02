@@ -266,341 +266,420 @@ namespace
         return 2;
     }
 
-#if defined(_M_IX86)
-    // DAT_06f730fc — FLD of +0.0; FLDZ is the same value (ZZZ only).
-    __declspec(naked) float FFastDot::FastDotZZZ(const FVector* /*Vec*/)
+// DAT_06f730fc — FLD of +0.0; FLDZ is the same value (ZZZ only).
+    float FFastDot::FastDotZZZ(const FVector* Vec)
     {
+#if defined(_M_IX86)
         __asm
         {
             fldz
             ret 4
         }
-    }
-    __declspec(naked) float FFastDot::FastDotZZO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZZG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZOZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZOO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fadd dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZOG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fadd dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZGZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZGO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            fadd dword ptr [eax + 8]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotZGG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            faddp st(1), st
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOZZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOZO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOZG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOOZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOOO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fadd dword ptr [eax + 4]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOOG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fadd dword ptr [eax + 4]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOGZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOGO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            fadd dword ptr [eax + 8]
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotOGG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            faddp st(1), st
-            fadd dword ptr [eax]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGZZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGZO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            fadd dword ptr [eax + 8]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGZG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            faddp st(1), st
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGOZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            fadd dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGOO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            fadd dword ptr [eax + 8]
-            fadd dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGOG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            faddp st(1), st
-            fadd dword ptr [eax + 4]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGGZ(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            faddp st(1), st
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGGO(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            faddp st(1), st
-            fadd dword ptr [eax + 8]
-            ret 4
-        }
-    }
-    __declspec(naked) float FFastDot::FastDotGGG(const FVector* /*Vec*/)
-    {
-        __asm
-        {
-            mov eax, dword ptr [esp + 4]
-            fld dword ptr [eax + 8]
-            fmul dword ptr [ecx + 8]
-            fld dword ptr [eax + 4]
-            fmul dword ptr [ecx + 4]
-            faddp st(1), st
-            fld dword ptr [eax]
-            fmul dword ptr [ecx]
-            faddp st(1), st
-            ret 4
-        }
-    }
 #else
-    float FFastDot::FastDotZZZ(const FVector*) { return 0.0f; }
-    float FFastDot::FastDotZZO(const FVector* Vec) { return Vec->Z; }
-    float FFastDot::FastDotZZG(const FVector* Vec) { return Vec->Z * C; }
-    float FFastDot::FastDotZOZ(const FVector* Vec) { return Vec->Y; }
-    float FFastDot::FastDotZOO(const FVector* Vec) { return Vec->Z + Vec->Y; }
-    float FFastDot::FastDotZOG(const FVector* Vec) { return Vec->Z * C + Vec->Y; }
-    float FFastDot::FastDotZGZ(const FVector* Vec) { return Vec->Y * B; }
-    float FFastDot::FastDotZGO(const FVector* Vec) { return Vec->Y * B + Vec->Z; }
-    float FFastDot::FastDotZGG(const FVector* Vec) { return Vec->Z * C + Vec->Y * B; }
-    float FFastDot::FastDotOZZ(const FVector* Vec) { return Vec->X; }
-    float FFastDot::FastDotOZO(const FVector* Vec) { return Vec->Z + Vec->X; }
-    float FFastDot::FastDotOZG(const FVector* Vec) { return Vec->Z * C + Vec->X; }
-    float FFastDot::FastDotOOZ(const FVector* Vec) { return Vec->Y + Vec->X; }
-    float FFastDot::FastDotOOO(const FVector* Vec) { return Vec->Z + Vec->Y + Vec->X; }
-    float FFastDot::FastDotOOG(const FVector* Vec) { return Vec->Z * C + Vec->Y + Vec->X; }
-    float FFastDot::FastDotOGZ(const FVector* Vec) { return Vec->Y * B + Vec->X; }
-    float FFastDot::FastDotOGO(const FVector* Vec) { return Vec->Y * B + Vec->Z + Vec->X; }
-    float FFastDot::FastDotOGG(const FVector* Vec) { return Vec->Z * C + Vec->Y * B + Vec->X; }
-    float FFastDot::FastDotGZZ(const FVector* Vec) { return Vec->X * A; }
-    float FFastDot::FastDotGZO(const FVector* Vec) { return Vec->X * A + Vec->Z; }
-    float FFastDot::FastDotGZG(const FVector* Vec) { return Vec->Z * C + Vec->X * A; }
-    float FFastDot::FastDotGOZ(const FVector* Vec) { return Vec->X * A + Vec->Y; }
-    float FFastDot::FastDotGOO(const FVector* Vec) { return Vec->X * A + Vec->Z + Vec->Y; }
-    float FFastDot::FastDotGOG(const FVector* Vec) { return Vec->Z * C + Vec->X * A + Vec->Y; }
-    float FFastDot::FastDotGGZ(const FVector* Vec) { return Vec->Y * B + Vec->X * A; }
-    float FFastDot::FastDotGGO(const FVector* Vec) { return Vec->Y * B + Vec->X * A + Vec->Z; }
-    float FFastDot::FastDotGGG(const FVector* Vec) { return Vec->Z * C + Vec->Y * B + Vec->X * A; }
+        return 0.0f;
+#endif
+    }
+    float FFastDot::FastDotZZO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            ret 4
+        }
+#else
+        return Vec->Z;
+#endif
+    }
+    float FFastDot::FastDotZZG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            ret 4
+        }
+#else
+        return Vec->Z * C;
+#endif
+    }
+    float FFastDot::FastDotZOZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotZOO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fadd dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->Z + Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotZOG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fadd dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotZGZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            ret 4
+        }
+#else
+        return Vec->Y * B;
+#endif
+    }
+    float FFastDot::FastDotZGO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            fadd dword ptr [eax + 8]
+            ret 4
+        }
+#else
+        return Vec->Y * B + Vec->Z;
+#endif
+    }
+    float FFastDot::FastDotZGG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            faddp st(1), st
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->Y * B;
+#endif
+    }
+    float FFastDot::FastDotOZZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOZO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Z + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOZG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOOZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Y + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOOO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fadd dword ptr [eax + 4]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Z + Vec->Y + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOOG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fadd dword ptr [eax + 4]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->Y + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOGZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Y * B + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOGO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            fadd dword ptr [eax + 8]
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Y * B + Vec->Z + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotOGG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            faddp st(1), st
+            fadd dword ptr [eax]
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->Y * B + Vec->X;
+#endif
+    }
+    float FFastDot::FastDotGZZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            ret 4
+        }
+#else
+        return Vec->X * A;
+#endif
+    }
+    float FFastDot::FastDotGZO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            fadd dword ptr [eax + 8]
+            ret 4
+        }
+#else
+        return Vec->X * A + Vec->Z;
+#endif
+    }
+    float FFastDot::FastDotGZG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            faddp st(1), st
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->X * A;
+#endif
+    }
+    float FFastDot::FastDotGOZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            fadd dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->X * A + Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotGOO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            fadd dword ptr [eax + 8]
+            fadd dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->X * A + Vec->Z + Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotGOG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            faddp st(1), st
+            fadd dword ptr [eax + 4]
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->X * A + Vec->Y;
+#endif
+    }
+    float FFastDot::FastDotGGZ(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            faddp st(1), st
+            ret 4
+        }
+#else
+        return Vec->Y * B + Vec->X * A;
+#endif
+    }
+    float FFastDot::FastDotGGO(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            faddp st(1), st
+            fadd dword ptr [eax + 8]
+            ret 4
+        }
+#else
+        return Vec->Y * B + Vec->X * A + Vec->Z;
+#endif
+    }
+    float FFastDot::FastDotGGG(const FVector* Vec)
+    {
+#if defined(_M_IX86)
+        __asm
+        {
+            mov eax, dword ptr [esp + 4]
+            fld dword ptr [eax + 8]
+            fmul dword ptr [ecx + 8]
+            fld dword ptr [eax + 4]
+            fmul dword ptr [ecx + 4]
+            faddp st(1), st
+            fld dword ptr [eax]
+            fmul dword ptr [ecx]
+            faddp st(1), st
+            ret 4
+        }
+#else
+        return Vec->Z * C + Vec->Y * B + Vec->X * A;
+#endif
+    }
 #endif
 
     const FFastDotKernel G_FastDotKernels[27] = {
